@@ -220,7 +220,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5" />
-                      Get AI Feedback
+                      Get personalized feedback about your explanation
                     </>
                   )}
                 </button>
