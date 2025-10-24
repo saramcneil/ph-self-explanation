@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, Sparkles, Lightbulb, Search, CheckCircle, Loader } from 'lucide-react';
+import { AlertCircle, Sparkles, Search, CheckCircle, Loader } from 'lucide-react';
 import ProgressiveContent from './ProgressiveContent';
 
 const PhModule = () => {
@@ -7,8 +7,6 @@ const PhModule = () => {
   const [feedback, setFeedback] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showExpert, setShowExpert] = useState(false);
-  const [hintsRequested, setHintsRequested] = useState(0);
-  const [currentHint, setCurrentHint] = useState(null);
   const [showProgressiveContent, setShowProgressiveContent] = useState(true);
 
   const contentData = {
@@ -117,60 +115,6 @@ FEEDBACK GUIDELINES:
 YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or any other formatting.`;
   };
 
-  const generateHintPrompt = () => {
-    const hintLevel = hintsRequested + 1;
-    return `The student is working on this self-explanation prompt about pH and proteins:
-"${contentData.prompt}"
-
-Learning content: ${contentData.text}
-
-They've requested hint ${hintLevel} of 3.
-
-Provide a hint in JSON format with NO markdown:
-
-{
-  "hint": "your hint text here"
-}
-
-Guidelines based on hint level:
-- Hint 1: Ask a guiding question about why protein shape matters
-- Hint 2: Provide an analogy about bonds and pH
-- Hint 3: Give more direct guidance about the three defense systems
-
-YOUR RESPONSE MUST BE ONLY VALID JSON.`;
-  };
-
-  const requestHint = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 500,
-          messages: [{
-            role: "user",
-            content: generateHintPrompt()
-          }]
-        })
-      });
-
-      const data = await response.json();
-      let responseText = data.content[0].text;
-      
-      responseText = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-      
-      const hintData = JSON.parse(responseText);
-      setCurrentHint(hintData.hint);
-      setHintsRequested(prev => prev + 1);
-    } catch (error) {
-      console.error("Error getting hint:", error);
-      setCurrentHint("Think about what maintains protein shape at the molecular level. What types of bonds are involved, and why would they be sensitive to pH?");
-    }
-    setLoading(false);
-  };
-
   const submitExplanation = async () => {
     if (!userExplanation.trim()) {
       alert("Please write your explanation first!");
@@ -180,33 +124,24 @@ YOUR RESPONSE MUST BE ONLY VALID JSON.`;
     setLoading(true);
     setFeedback(null);
 
-try {
-  console.log("Sending request to API...");
-  
-  const response = await fetch("/api/feedback", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 2000,
-      messages: [{
-        role: "user",
-        content: generateFeedbackPrompt()
-      }]
-    })
-  });
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 2000,
+          messages: [{
+            role: "user",
+            content: generateFeedbackPrompt()
+          }]
+        })
+      });
 
-  console.log("Response status:", response.status);
-  console.log("Response ok:", response.ok);
-  
-  const rawText = await response.text();
-  console.log("Raw response:", rawText);
-  
-  const data = JSON.parse(rawText);
-  console.log("Parsed data:", data);
-  
-  let responseText = data.content[0].text;
+      const rawText = await response.text();
+      const data = JSON.parse(rawText);
       
+      let responseText = data.content[0].text;
       responseText = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       
       const feedbackJSON = JSON.parse(responseText);
@@ -247,71 +182,50 @@ try {
           />
         ) : (
           <>
-            <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg mb-6">
-              <div className="bg-white p-4 rounded-lg border-2 border-purple-200">
-                <p className="font-semibold text-purple-800 mb-2">📝 Your Task:</p>
-                <p className="text-gray-700">{contentData.prompt}</p>
-              </div>
-            </div>
-
-            {hintsRequested < 3 && !feedback && (
-              <div className="mb-4">
-                <button
-                  onClick={requestHint}
-                  disabled={loading}
-                  className="flex items-center gap-2 text-amber-600 hover:text-amber-700 font-medium"
-                >
-                  <Lightbulb className="w-5 h-5" />
-                  {loading ? "Getting hint..." : `Need a hint? (${hintsRequested}/3 used)`}
-                </button>
-              </div>
-            )}
-
-            {currentHint && (
-              <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-lg mb-6">
-                <div className="flex items-start gap-3">
-                  <Lightbulb className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <p className="font-semibold text-amber-900 mb-1">Hint {hintsRequested}:</p>
-                    <p className="text-gray-700">{currentHint}</p>
+            {!feedback && (
+              <>
+                <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg mb-6">
+                  <div className="bg-white p-4 rounded-lg border-2 border-purple-200">
+                    <p className="font-semibold text-purple-800 mb-2">📝 Your Task:</p>
+                    <p className="text-gray-700">{contentData.prompt}</p>
                   </div>
                 </div>
-              </div>
+
+                <div className="mb-6">
+                  <label className="block text-gray-700 font-semibold mb-2">
+                    Your Explanation:
+                  </label>
+                  <textarea
+                    value={userExplanation}
+                    onChange={(e) => setUserExplanation(e.target.value)}
+                    placeholder="Write your explanation here. Take your time to think through the concepts and explain them in your own words..."
+                    className="w-full p-4 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none min-h-[200px] text-gray-800"
+                    disabled={loading}
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    Tip: Aim for 3-5 sentences. Explain the mechanism, not just facts.
+                  </p>
+                </div>
+
+                <button
+                  onClick={submitExplanation}
+                  disabled={loading || !userExplanation.trim()}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <Loader className="w-5 h-5 animate-spin" />
+                      Analyzing your explanation...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5" />
+                      Get AI Feedback
+                    </>
+                  )}
+                </button>
+              </>
             )}
-
-            <div className="mb-6">
-              <label className="block text-gray-700 font-semibold mb-2">
-                Your Explanation:
-              </label>
-              <textarea
-                value={userExplanation}
-                onChange={(e) => setUserExplanation(e.target.value)}
-                placeholder="Write your explanation here. Take your time to think through the concepts and explain them in your own words..."
-                className="w-full p-4 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none min-h-[200px] text-gray-800"
-                disabled={loading}
-              />
-              <p className="text-sm text-gray-500 mt-2">
-                Tip: Aim for 3-5 sentences. Explain the mechanism, not just facts.
-              </p>
-            </div>
-
-            <button
-              onClick={submitExplanation}
-              disabled={loading || !userExplanation.trim()}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <Loader className="w-5 h-5 animate-spin" />
-                  Analyzing your explanation...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  Get AI Feedback
-                </>
-              )}
-            </button>
           </>
         )}
       </div>
@@ -321,6 +235,12 @@ try {
           <h2 className="text-2xl font-bold text-purple-900 mb-6">
             📊 Your Personalized Feedback
           </h2>
+
+          {/* Your Explanation Display */}
+          <div className="bg-gray-50 border-2 border-gray-300 p-6 rounded-lg">
+            <h3 className="font-bold text-gray-900 mb-3">Your Explanation:</h3>
+            <p className="text-gray-700 leading-relaxed italic">"{userExplanation}"</p>
+          </div>
 
           {feedback.strengths && feedback.strengths.length > 0 && (
             <div className="space-y-3">
@@ -376,11 +296,7 @@ try {
                     : 'bg-amber-50 border-amber-500'
                 }`}>
                   <div className="flex items-start gap-3">
-                    {gap.optional ? (
-                      <Search className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-                    ) : (
-                      <Lightbulb className="w-5 h-5 text-amber-600 mt-1 flex-shrink-0" />
-                    )}
+                    <Search className={`w-5 h-5 mt-1 flex-shrink-0 ${gap.optional ? 'text-purple-600' : 'text-amber-600'}`} />
                     <div>
                       <p className="font-semibold mb-1" style={{color: gap.optional ? '#7c3aed' : '#d97706'}}>
                         {gap.optional ? '🔍 Extension:' : '💡 Consider:'}
@@ -440,18 +356,6 @@ try {
               </div>
             )}
           </div>
-
-          <button
-            onClick={() => {
-              setFeedback(null);
-              setShowExpert(false);
-              setCurrentHint(null);
-              setHintsRequested(0);
-            }}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all"
-          >
-            ✏️ Revise Your Explanation
-          </button>
         </div>
       )}
     </div>
