@@ -180,23 +180,32 @@ YOUR RESPONSE MUST BE ONLY VALID JSON.`;
     setLoading(true);
     setFeedback(null);
 
-    try {
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 2000,
-          messages: [{
-            role: "user",
-            content: generateFeedbackPrompt()
-          }]
-        })
-      });
+try {
+  console.log("Sending request to API...");
+  
+  const response = await fetch("/api/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 2000,
+      messages: [{
+        role: "user",
+        content: generateFeedbackPrompt()
+      }]
+    })
+  });
 
-const data = await response.json();
-console.log("API Response:", data);
-let responseText = data.content[0].text;
+  console.log("Response status:", response.status);
+  console.log("Response ok:", response.ok);
+  
+  const rawText = await response.text();
+  console.log("Raw response:", rawText);
+  
+  const data = JSON.parse(rawText);
+  console.log("Parsed data:", data);
+  
+  let responseText = data.content[0].text;
       
       responseText = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       
