@@ -194,8 +194,9 @@ YOUR RESPONSE MUST BE ONLY VALID JSON.`;
         })
       });
 
-      const data = await response.json();
-      let responseText = data.content[0].text;
+const data = await response.json();
+console.log("API Response:", data);
+let responseText = data.content[0].text;
       
       responseText = responseText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
       
