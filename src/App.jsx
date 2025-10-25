@@ -59,13 +59,24 @@ const PhModule = () => {
 
   const sendToGoogleSheets = async (data) => {
   try {
-    // Format feedback in a more readable way
-    const formattedFeedback = {
-      strengths: data.feedback?.strengths?.map(s => s.content).join(' | ') || 'None',
-      misconceptions: data.feedback?.misconceptions?.map(m => m.correction).join(' | ') || 'None',
-      gaps: data.feedback?.gaps?.map(g => g.suggestion).join(' | ') || 'None',
-      extensionQuestions: data.feedback?.extensionQuestions?.map(q => q.question).join(' | ') || 'None'
-    };
+    // Format feedback in a simple, readable way
+    let feedbackText = '';
+    
+    if (data.feedback?.strengths && data.feedback.strengths.length > 0) {
+      feedbackText += 'STRENGTHS: ' + data.feedback.strengths.map(s => s.content).join(' | ') + '\n\n';
+    }
+    
+    if (data.feedback?.misconceptions && data.feedback.misconceptions.length > 0) {
+      feedbackText += 'MISCONCEPTIONS: ' + data.feedback.misconceptions.map(m => m.correction).join(' | ') + '\n\n';
+    }
+    
+    if (data.feedback?.gaps && data.feedback.gaps.length > 0) {
+      feedbackText += 'GAPS: ' + data.feedback.gaps.map(g => g.suggestion).join(' | ') + '\n\n';
+    }
+    
+    if (data.feedback?.extensionQuestions && data.feedback.extensionQuestions.length > 0) {
+      feedbackText += 'EXTENSION QUESTIONS: ' + data.feedback.extensionQuestions.map(q => q.question).join(' | ');
+    }
 
     await fetch(GOOGLE_SHEET_URL, {
       method: 'POST',
@@ -76,7 +87,7 @@ const PhModule = () => {
       body: JSON.stringify({
         name: data.name,
         explanation: data.explanation,
-        feedback: JSON.stringify(formattedFeedback, null, 2), // Pretty-printed
+        feedback: feedbackText,
         viewedExpert: data.viewedExpert,
         understandingLevel: data.understandingLevel
       })
