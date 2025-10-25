@@ -69,16 +69,16 @@ const BloodPhScale = () => {
         </g>
         
         {/* Example substances for context */}
-        <g opacity="0.6">
-          <text x="92" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Stomach</text>
-          <text x="92" y="68" textAnchor="middle" fontSize="10" fill="#64748b">acid (2)</text>
-          
-          <text x="350" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Pure</text>
-          <text x="350" y="68" textAnchor="middle" fontSize="10" fill="#64748b">water (7)</text>
-          
-          <text x="608" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Bleach</text>
-          <text x="608" y="68" textAnchor="middle" fontSize="10" fill="#64748b">(13)</text>
-        </g>
+<g opacity="1">
+  <text x="92" y="55" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">Stomach</text>
+  <text x="92" y="68" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">acid (2)</text>
+  
+  <text x="350" y="55" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">Pure</text>
+  <text x="350" y="68" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">water (7)</text>
+  
+  <text x="608" y="55" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">Bleach</text>
+  <text x="608" y="68" textAnchor="middle" fontSize="10" fill="#334155" fontWeight="600">(13)</text>
+</g>
       </svg>
       
       <p className="text-sm text-gray-600 text-center mt-4 italic max-w-3xl mx-auto">
