@@ -2,6 +2,92 @@ import React, { useState } from 'react';
 import { AlertCircle, Sparkles, Search, CheckCircle, Loader, User } from 'lucide-react';
 import ProgressiveContent from './ProgressiveContent';
 
+const BloodPhScale = () => {
+  return (
+    <div className="my-8">
+      <svg viewBox="0 0 700 300" className="w-full max-w-4xl mx-auto">
+        {/* Background */}
+        <rect width="700" height="300" fill="#f8fafc"/>
+        
+        {/* Title */}
+        <text x="350" y="30" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#1e293b">
+          The Narrow Window of Blood pH
+        </text>
+        
+        {/* pH Scale Bar - Gradient from red to blue */}
+        <defs>
+          <linearGradient id="phGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#dc2626" />
+            <stop offset="35%" stopColor="#f97316" />
+            <stop offset="50%" stopColor="#fbbf24" />
+            <stop offset="65%" stopColor="#84cc16" />
+            <stop offset="85%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#6366f1" />
+          </linearGradient>
+        </defs>
+        
+        <rect x="50" y="80" width="600" height="60" fill="url(#phGradient)" rx="8" stroke="#475569" strokeWidth="2"/>
+        
+        {/* pH Numbers */}
+        <text x="50" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">0</text>
+        <text x="135" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">2</text>
+        <text x="221" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">4</text>
+        <text x="307" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">6</text>
+        <text x="393" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">8</text>
+        <text x="479" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">10</text>
+        <text x="565" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">12</text>
+        <text x="650" y="165" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#1e293b">14</text>
+        
+        {/* Labels */}
+        <text x="150" y="195" textAnchor="middle" fontSize="14" fill="#dc2626" fontWeight="bold">ACIDIC</text>
+        <text x="350" y="195" textAnchor="middle" fontSize="14" fill="#059669" fontWeight="bold">NEUTRAL</text>
+        <text x="550" y="195" textAnchor="middle" fontSize="14" fill="#3b82f6" fontWeight="bold">BASIC</text>
+        
+        {/* Blood pH Range - Highlighted box */}
+        <g>
+          <rect x="365" y="75" width="7" height="70" fill="#10b981" opacity="0.3" stroke="#10b981" strokeWidth="3" rx="3"/>
+          
+          {/* Callout box */}
+          <rect x="280" y="210" width="180" height="70" fill="#10b981" opacity="0.95" rx="8" stroke="#059669" strokeWidth="2"/>
+          <text x="370" y="235" textAnchor="middle" fontSize="16" fontWeight="bold" fill="white">
+            Blood pH Range
+          </text>
+          <text x="370" y="258" textAnchor="middle" fontSize="20" fontWeight="bold" fill="white">
+            7.35 - 7.45
+          </text>
+          <text x="370" y="275" textAnchor="middle" fontSize="11" fill="white">
+            Only 0.1 pH units!
+          </text>
+          
+          {/* Arrow pointing to the range */}
+          <path d="M 368 210 L 368 145" stroke="#059669" strokeWidth="3" markerEnd="url(#arrowhead-green2)"/>
+          <defs>
+            <marker id="arrowhead-green2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#059669"/>
+            </marker>
+          </defs>
+        </g>
+        
+        {/* Example substances for context */}
+        <g opacity="0.6">
+          <text x="92" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Stomach</text>
+          <text x="92" y="68" textAnchor="middle" fontSize="10" fill="#64748b">acid (2)</text>
+          
+          <text x="350" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Pure</text>
+          <text x="350" y="68" textAnchor="middle" fontSize="10" fill="#64748b">water (7)</text>
+          
+          <text x="608" y="55" textAnchor="middle" fontSize="10" fill="#64748b">Bleach</text>
+          <text x="608" y="68" textAnchor="middle" fontSize="10" fill="#64748b">(13)</text>
+        </g>
+      </svg>
+      
+      <p className="text-sm text-gray-600 text-center mt-4 italic max-w-3xl mx-auto">
+        Blood pH must stay within an incredibly narrow range (7.35-7.45) despite the body's constant metabolic production of acids and bases.
+      </p>
+    </div>
+  );
+};
+
 const PhModule = () => {
   const [learnerName, setLearnerName] = useState('');
   const [nameSubmitted, setNameSubmitted] = useState(false);
@@ -18,7 +104,7 @@ const PhModule = () => {
     title: "Why pH Matters: The Narrow Window of Life",
     progressiveScreens: [
       "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>—a remarkably narrow range considering the constant metabolic activity occurring in your body. <br><br><strong>Why is this tight control so critical?</strong>",
-      
+"__DIAGRAM__", 
       "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
       
       "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted—it won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
@@ -291,7 +377,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
               Continue to Module
             </button>
             <p className="text-sm text-gray-500 mt-4">
-              Your responses will be used for research purposes to improve educational technology.
+              Your responses will be used for research purposes to improve medical education.
             </p>
           </div>
         )}
@@ -488,7 +574,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
 
           <div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center">
             <p className="text-gray-700 font-semibold">✅ Thank you for trying out personalized feedback!</p>
-            <p className="text-sm text-gray-600 mt-2">Your responses have been recorded and will help improve educational technology.</p>
+            <p className="text-sm text-gray-600 mt-2">Your responses have been recorded and will help improve medical eductaion.</p>
           </div>
         </div>
       )}
