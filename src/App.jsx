@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
-import { AlertCircle, Sparkles, Search, CheckCircle, Loader } from 'lucide-react';
+import { AlertCircle, Sparkles, Search, CheckCircle, Loader, User } from 'lucide-react';
 import ProgressiveContent from './ProgressiveContent';
 
 const PhModule = () => {
+  const [learnerName, setLearnerName] = useState('');
+  const [nameSubmitted, setNameSubmitted] = useState(false);
   const [userExplanation, setUserExplanation] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showExpert, setShowExpert] = useState(false);
   const [showProgressiveContent, setShowProgressiveContent] = useState(true);
 
+  // **REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT WEB APP URL**
+  const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwfQ-79kvUpkA3SjJg847tS6Kay9GXb_CMfQpvKgXIY8tB4VDMYQtHKW1toHbv8J6j5/exec';
+
   const contentData = {
     title: "Why pH Matters: The Narrow Window of Life",
     progressiveScreens: [
-      "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>. This is a remarkably narrow range considering the constant metabolic activity occurring in your body. <br><br><strong>Why is this tight control so critical?</strong>",
+      "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>—a remarkably narrow range considering the constant metabolic activity occurring in your body. <br><br><strong>Why is this tight control so critical?</strong>",
       
-      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, and membrane channels transport ions. But all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
+      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
       
-      "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted. It won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
+      "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted—it won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
       
-      "<h3 class='text-xl font-bold text-purple-900 mb-4'>Daily Acid Production</h3>Your body produces approximately <strong>15,000-20,000 mmol of CO₂ daily</strong> from cellular metabolism. This CO₂ combines with water to form carbonic acid (H₂CO₃), which can donate hydrogen ions (H⁺) and lower pH. <br><br>Additionally, metabolism of proteins and phospholipids generates <strong>50-100 mmol of non-volatile acids daily</strong>. These acids can't simply be breathed out like CO₂.",
+      "<h3 class='text-xl font-bold text-purple-900 mb-4'>Daily Acid Production</h3>Your body produces approximately <strong>15,000-20,000 mmol of CO₂ daily</strong> from cellular metabolism. This CO₂ combines with water to form carbonic acid (H₂CO₃), which can donate hydrogen ions (H⁺) and lower pH. <br><br>Additionally, metabolism of proteins and phospholipids generates <strong>50-100 mmol of non-volatile acids daily</strong>—acids that can't simply be breathed out like CO₂.",
       
       "<h3 class='text-xl font-bold text-purple-900 mb-4'>Three Lines of Defense</h3>To handle this constant acid load while maintaining stable pH, your body employs a three-tiered defense system:<br><br><div class='space-y-3 mt-4'><div class='bg-white p-4 rounded-lg border-l-4 border-blue-500'><strong>1. Chemical buffers</strong><br>Immediate response - within seconds</div><div class='bg-white p-4 rounded-lg border-l-4 border-green-500'><strong>2. Respiratory compensation</strong><br>Rapid response - minutes to hours</div><div class='bg-white p-4 rounded-lg border-l-4 border-purple-500'><strong>3. Renal compensation</strong><br>Slow but powerful - days</div></div>",
       
@@ -49,6 +54,22 @@ const PhModule = () => {
         "Believing proteins can function in any pH environment",
         "Thinking buffers solve the problem permanently"
       ]
+    }
+  };
+
+  const sendToGoogleSheets = async (data) => {
+    try {
+      await fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      console.log('Data sent to Google Sheets');
+    } catch (error) {
+      console.error('Error sending to Google Sheets:', error);
     }
   };
 
@@ -115,6 +136,14 @@ FEEDBACK GUIDELINES:
 YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or any other formatting.`;
   };
 
+  const submitName = () => {
+    if (learnerName.trim().length < 2) {
+      alert("Please enter your name");
+      return;
+    }
+    setNameSubmitted(true);
+  };
+
   const submitExplanation = async () => {
     if (!userExplanation.trim()) {
       alert("Please write your explanation first!");
@@ -146,12 +175,38 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
       
       const feedbackJSON = JSON.parse(responseText);
       setFeedback(feedbackJSON);
+
+      // Send data to Google Sheets
+      await sendToGoogleSheets({
+        name: learnerName,
+        explanation: userExplanation,
+        feedback: feedbackJSON,
+        viewedExpert: false,
+        understandingLevel: feedbackJSON.overallAssessment?.understandingLevel || 'unknown'
+      });
+
     } catch (error) {
       console.error("Error getting feedback:", error);
       alert("Error getting feedback. Please try again.");
     }
 
     setLoading(false);
+  };
+
+  const handleViewExpert = async () => {
+    const newShowExpert = !showExpert;
+    setShowExpert(newShowExpert);
+    
+    // Log when they view expert explanation
+    if (newShowExpert && feedback) {
+      await sendToGoogleSheets({
+        name: learnerName,
+        explanation: userExplanation,
+        feedback: feedback,
+        viewedExpert: true,
+        understandingLevel: feedback.overallAssessment?.understandingLevel || 'unknown'
+      });
+    }
   };
 
   const FeedbackTypeIcon = ({ type }) => {
@@ -172,69 +227,104 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
           <h1 className="text-3xl font-bold text-purple-900 mb-2">
             🧬 {contentData.title}
           </h1>
-          <p className="text-gray-600">Learn through self-explanation with personalized feedback</p>
+          <p className="text-gray-600">Learn through self-explanation with AI feedback</p>
         </div>
 
-        {showProgressiveContent ? (
-          <ProgressiveContent 
-            screens={contentData.progressiveScreens}
-            onComplete={() => setShowProgressiveContent(false)}
-          />
-        ) : (
+        {/* Name Collection */}
+        {!nameSubmitted && (
+          <div className="bg-purple-50 border-2 border-purple-300 rounded-xl p-8 text-center">
+            <User className="w-16 h-16 mx-auto mb-4 text-purple-600" />
+            <h2 className="text-2xl font-bold text-purple-900 mb-4">Welcome!</h2>
+            <p className="text-gray-700 mb-6">Before we begin, please enter your name:</p>
+            <input
+              type="text"
+              value={learnerName}
+              onChange={(e) => setLearnerName(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && submitName()}
+              placeholder="Enter your full name"
+              className="w-full max-w-md mx-auto p-4 border-2 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none text-gray-800 text-lg mb-4"
+              autoFocus
+            />
+            <button
+              onClick={submitName}
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg"
+            >
+              Continue to Module
+            </button>
+            <p className="text-sm text-gray-500 mt-4">
+              Your responses will be used for research purposes to improve educational technology.
+            </p>
+          </div>
+        )}
+
+        {/* Progressive Content and Self-Explanation */}
+        {nameSubmitted && (
           <>
-            {!feedback && (
+            {showProgressiveContent ? (
+              <ProgressiveContent 
+                screens={contentData.progressiveScreens}
+                onComplete={() => setShowProgressiveContent(false)}
+              />
+            ) : (
               <>
-                <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg mb-6">
-                  <div className="bg-white p-4 rounded-lg border-2 border-purple-200">
-                    <p className="font-semibold text-purple-800 mb-2">📝 Your Task:</p>
-                    <p className="text-gray-700">{contentData.prompt}</p>
-                  </div>
-                </div>
+                {!feedback && (
+                  <>
+                    <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg mb-6">
+                      <div className="bg-white p-4 rounded-lg border-2 border-purple-200">
+                        <p className="font-semibold text-purple-800 mb-2">📝 Your Task:</p>
+                        <p className="text-gray-700">{contentData.prompt}</p>
+                      </div>
+                    </div>
 
-                <div className="mb-6">
-                  <label className="block text-gray-700 font-semibold mb-2">
-                    Your Explanation:
-                  </label>
-                  <textarea
-                    value={userExplanation}
-                    onChange={(e) => setUserExplanation(e.target.value)}
-                    placeholder="Write your explanation here. Take your time to think through the concepts and explain them in your own words..."
-                    className="w-full p-4 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none min-h-[200px] text-gray-800"
-                    disabled={loading}
-                  />
-                  <p className="text-sm text-gray-500 mt-2">
-                    Tip: Aim for 3-5 sentences. Explain the mechanism, not just facts.
-                  </p>
-                </div>
+                    <div className="mb-6">
+                      <label className="block text-gray-700 font-semibold mb-2">
+                        Your Explanation:
+                      </label>
+                      <textarea
+                        value={userExplanation}
+                        onChange={(e) => setUserExplanation(e.target.value)}
+                        placeholder="Write your explanation here. Take your time to think through the concepts and explain them in your own words..."
+                        className="w-full p-4 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none min-h-[200px] text-gray-800"
+                        disabled={loading}
+                      />
+                      <p className="text-sm text-gray-500 mt-2">
+                        Tip: Aim for 3-5 sentences. Explain the mechanism, not just facts.
+                      </p>
+                    </div>
 
-                <button
-                  onClick={submitExplanation}
-                  disabled={loading || !userExplanation.trim()}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
-                >
-                  {loading ? (
-                    <>
-                      <Loader className="w-5 h-5 animate-spin" />
-                      Analyzing your explanation...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5" />
-                      Click here to get personalized feedback about your explanation
-                    </>
-                  )}
-                </button>
+                    <button
+                      onClick={submitExplanation}
+                      disabled={loading || !userExplanation.trim()}
+                      className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader className="w-5 h-5 animate-spin" />
+                          Analyzing your explanation...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5" />
+                          Get personalized feedback about your explanation
+                        </>
+                      )}
+                    </button>
+                  </>
+                )}
               </>
             )}
           </>
         )}
       </div>
 
-      {feedback && !showProgressiveContent && (
+      {feedback && !showProgressiveContent && nameSubmitted && (
         <div className="bg-white rounded-xl shadow-lg p-8 space-y-6">
-          <h2 className="text-2xl font-bold text-purple-900 mb-6">
-            📊 Your Personalized Feedback
-          </h2>
+          <div className="flex items-center justify-between border-b-2 border-gray-200 pb-4">
+            <h2 className="text-2xl font-bold text-purple-900">
+              📊 Your Personalized Feedback
+            </h2>
+            <p className="text-sm text-gray-500">Learner: {learnerName}</p>
+          </div>
 
           {/* Your Explanation Display */}
           <div className="bg-gray-50 border-2 border-gray-300 p-6 rounded-lg">
@@ -333,7 +423,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
 
           <div className="pt-4 border-t-2 border-gray-200">
             <button
-              onClick={() => setShowExpert(!showExpert)}
+              onClick={handleViewExpert}
               className="text-purple-600 hover:text-purple-700 font-semibold flex items-center gap-2"
             >
               <CheckCircle className="w-5 h-5" />
@@ -355,6 +445,11 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center">
+            <p className="text-gray-700 font-semibold">✅ Thank you for participating in this study!</p>
+            <p className="text-sm text-gray-600 mt-2">Your responses have been recorded and will help improve educational technology.</p>
           </div>
         </div>
       )}
