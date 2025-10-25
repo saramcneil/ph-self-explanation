@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
-const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
+const ProgressiveContent = ({ screens, onComplete, DiagramComponent, ProteinDiagramComponent }) => {
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
