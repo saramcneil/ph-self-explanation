@@ -516,6 +516,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
   screens={contentData.progressiveScreens}
   onComplete={() => setShowProgressiveContent(false)}
   DiagramComponent={BloodPhScale}
+  ProteinDiagramComponent={ProteinDenaturationDiagram}
 />
             ) : (
               <>
