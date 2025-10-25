@@ -462,7 +462,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
           </div>
 
           <div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center">
-            <p className="text-gray-700 font-semibold">✅ Thank you for participating in this study!</p>
+            <p className="text-gray-700 font-semibold">✅ Thank you for trying out personalized feedback!</p>
             <p className="text-sm text-gray-600 mt-2">Your responses have been recorded and will help improve educational technology.</p>
           </div>
         </div>
