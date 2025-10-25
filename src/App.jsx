@@ -352,7 +352,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
           <h1 className="text-3xl font-bold text-purple-900 mb-2">
             🧬 {contentData.title}
           </h1>
-          <p className="text-gray-600">Learn through self-explanation with AI feedback</p>
+          <p className="text-gray-600">How your body maintains acid-base balance</p>
         </div>
 
         {/* Name Collection */}
