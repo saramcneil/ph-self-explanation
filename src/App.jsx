@@ -104,7 +104,7 @@ const PhModule = () => {
     title: "Why pH Matters: The Narrow Window of Life",
 progressiveScreens: [
   "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>—a remarkably narrow range considering the constant metabolic activity occurring in your body.__SHOW_DIAGRAM__",
-  "<strong>Why is this tight control so critical?</strong>",
+"<strong>Why is this tight control so critical?</strong><br><br>Even a small shift of just 0.2 pH units - from 7.4 to 7.2 - for example, represents a <strong>60% increase in hydrogen ion concentration</strong>. This may not sound dramatic, but your cells and the proteins within them are exquisitely sensitive to such changes.<br><br>To understand why, we need to consider what makes proteins work in the first place."
       "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
       
       "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted—it won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
