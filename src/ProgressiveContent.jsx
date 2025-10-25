@@ -16,22 +16,23 @@ const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
   return (
     <div className="space-y-6">
       <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg min-h-[300px]">
-       {screens[currentScreen].includes("__SHOW_DIAGRAM__") ? (
-  <>
-    <div 
-      className="text-gray-800 leading-relaxed text-lg"
-      dangerouslySetInnerHTML={{ __html: screens[currentScreen].replace("__SHOW_DIAGRAM__", "") }}
-    />
-    {DiagramComponent && <DiagramComponent />}
-  </>
-) : screens[currentScreen] === "__DIAGRAM__" ? (
-  DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>
-) : (
-  <div 
-    className="text-gray-800 leading-relaxed text-lg"
-    dangerouslySetInnerHTML={{ __html: screens[currentScreen] }}
-  />
-)}
+        {screens[currentScreen].includes("__SHOW_DIAGRAM__") ? (
+          <>
+            <div 
+              className="text-gray-800 leading-relaxed text-lg"
+              dangerouslySetInnerHTML={{ __html: screens[currentScreen].replace("__SHOW_DIAGRAM__", "") }}
+            />
+            {DiagramComponent && <DiagramComponent />}
+          </>
+        ) : screens[currentScreen] === "__DIAGRAM__" ? (
+          DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>
+        ) : (
+          <div 
+            className="text-gray-800 leading-relaxed text-lg"
+            dangerouslySetInnerHTML={{ __html: screens[currentScreen] }}
+          />
+        )}
+      </div>
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
