@@ -12,13 +12,13 @@ const PhModule = () => {
   const contentData = {
     title: "Why pH Matters: The Narrow Window of Life",
     progressiveScreens: [
-      "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>—a remarkably narrow range considering the constant metabolic activity occurring in your body. <br><br><strong>Why is this tight control so critical?</strong>",
+      "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>. This is a remarkably narrow range considering the constant metabolic activity occurring in your body. <br><br><strong>Why is this tight control so critical?</strong>",
       
-      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
+      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, and membrane channels transport ions. But all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
       
-      "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted—it won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
+      "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted. It won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
       
-      "<h3 class='text-xl font-bold text-purple-900 mb-4'>Daily Acid Production</h3>Your body produces approximately <strong>15,000-20,000 mmol of CO₂ daily</strong> from cellular metabolism. This CO₂ combines with water to form carbonic acid (H₂CO₃), which can donate hydrogen ions (H⁺) and lower pH. <br><br>Additionally, metabolism of proteins and phospholipids generates <strong>50-100 mmol of non-volatile acids daily</strong>—acids that can't simply be breathed out like CO₂.",
+      "<h3 class='text-xl font-bold text-purple-900 mb-4'>Daily Acid Production</h3>Your body produces approximately <strong>15,000-20,000 mmol of CO₂ daily</strong> from cellular metabolism. This CO₂ combines with water to form carbonic acid (H₂CO₃), which can donate hydrogen ions (H⁺) and lower pH. <br><br>Additionally, metabolism of proteins and phospholipids generates <strong>50-100 mmol of non-volatile acids daily</strong>. These acids can't simply be breathed out like CO₂.",
       
       "<h3 class='text-xl font-bold text-purple-900 mb-4'>Three Lines of Defense</h3>To handle this constant acid load while maintaining stable pH, your body employs a three-tiered defense system:<br><br><div class='space-y-3 mt-4'><div class='bg-white p-4 rounded-lg border-l-4 border-blue-500'><strong>1. Chemical buffers</strong><br>Immediate response - within seconds</div><div class='bg-white p-4 rounded-lg border-l-4 border-green-500'><strong>2. Respiratory compensation</strong><br>Rapid response - minutes to hours</div><div class='bg-white p-4 rounded-lg border-l-4 border-purple-500'><strong>3. Renal compensation</strong><br>Slow but powerful - days</div></div>",
       
@@ -220,7 +220,7 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
                   ) : (
                     <>
                       <Sparkles className="w-5 h-5" />
-                      Get personalized feedback about your explanation
+                      Click here to get personalized feedback about your explanation
                     </>
                   )}
                 </button>
