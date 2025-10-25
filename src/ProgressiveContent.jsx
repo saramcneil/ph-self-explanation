@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
-const ProgressiveContent = ({ screens, onComplete }) => {
+const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
   const [currentScreen, setCurrentScreen] = useState(0);
 
   const nextScreen = () => {
@@ -16,9 +16,14 @@ const ProgressiveContent = ({ screens, onComplete }) => {
   return (
     <div className="space-y-6">
       <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg min-h-[300px]">
-        <div 
-          className="text-gray-800 leading-relaxed text-lg"
-          dangerouslySetInnerHTML={{ __html: screens[currentScreen] }}
+{screens[currentScreen] === "__DIAGRAM__" ? (
+  DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>
+) : (
+  <div 
+    className="text-gray-800 leading-relaxed text-lg"
+    dangerouslySetInnerHTML={{ __html: screens[currentScreen] }}
+  />
+)}
         />
       </div>
 
