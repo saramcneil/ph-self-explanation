@@ -24,6 +24,14 @@ const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
             />
             {DiagramComponent && <DiagramComponent />}
           </>
+      ) : screens[currentScreen].includes("__SHOW_PROTEIN_DIAGRAM__") ? (
+  <>
+    <div 
+      className="text-gray-800 leading-relaxed text-lg"
+      dangerouslySetInnerHTML={{ __html: screens[currentScreen].replace("__SHOW_PROTEIN_DIAGRAM__", "") }}
+    />
+    {ProteinDiagramComponent && <ProteinDiagramComponent />}
+  </>
         ) : screens[currentScreen] === "__DIAGRAM__" ? (
           DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>
         ) : (
