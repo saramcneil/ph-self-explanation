@@ -88,6 +88,132 @@ const BloodPhScale = () => {
   );
 };
 
+const ProteinDenaturationDiagram = () => {
+  return (
+    <div className="my-8">
+      <svg viewBox="0 0 800 400" className="w-full max-w-4xl mx-auto">
+        {/* Background */}
+        <rect width="800" height="400" fill="#f8fafc"/>
+        
+        {/* Title */}
+        <text x="400" y="30" textAnchor="middle" fontSize="22" fontWeight="bold" fill="#1e293b">
+          How pH Changes Denature Proteins
+        </text>
+        
+        {/* Left side - Normal pH */}
+        <g>
+          {/* Label */}
+          <rect x="50" y="60" width="280" height="40" fill="#10b981" opacity="0.2" rx="8"/>
+          <text x="190" y="85" textAnchor="middle" fontSize="18" fontWeight="bold" fill="#059669">
+            Normal pH (7.4)
+          </text>
+          
+          {/* Functional protein - complex folded shape */}
+          <g transform="translate(190, 180)">
+            {/* Main protein body - stylized folded structure */}
+            <path d="M -60,-40 Q -40,-60 -20,-50 T 20,-40 T 60,-20 Q 70,0 60,20 T 20,40 T -20,50 Q -40,60 -60,40 T -60,-40" 
+                  fill="#3b82f6" opacity="0.8" stroke="#1e40af" strokeWidth="3"/>
+            
+            {/* Active site pocket - shown as indentation */}
+            <ellipse cx="0" cy="-15" rx="18" ry="12" fill="#ef4444" opacity="0.9" stroke="#dc2626" strokeWidth="2"/>
+            <text x="0" y="-10" textAnchor="middle" fontSize="10" fill="white" fontWeight="bold">
+              Active Site
+            </text>
+            
+            {/* Weak bonds represented as dashed lines */}
+            <line x1="-40" y1="-30" x2="-40" y2="30" stroke="#6366f1" strokeWidth="2" strokeDasharray="4,4" opacity="0.6"/>
+            <line x1="0" y1="-40" x2="0" y2="40" stroke="#6366f1" strokeWidth="2" strokeDasharray="4,4" opacity="0.6"/>
+            <line x1="40" y1="-20" x2="40" y2="20" stroke="#6366f1" strokeWidth="2" strokeDasharray="4,4" opacity="0.6"/>
+          </g>
+          
+          {/* Substrate molecule */}
+          <g transform="translate(190, 100)">
+            <circle cx="0" cy="0" r="15" fill="#fbbf24" stroke="#f59e0b" strokeWidth="2"/>
+            <text x="0" y="5" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#78350f">
+              S
+            </text>
+          </g>
+          
+          {/* Arrow showing substrate fits */}
+          <path d="M 190 125 L 190 150" stroke="#059669" strokeWidth="3" markerEnd="url(#arrowgreen)"/>
+          <defs>
+            <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <polygon points="0 0, 10 3, 0 6" fill="#059669"/>
+            </marker>
+          </defs>
+          
+          {/* Label */}
+          <text x="190" y="300" textAnchor="middle" fontSize="14" fill="#059669" fontWeight="600">
+            ✓ Substrate binds perfectly
+          </text>
+          <text x="190" y="320" textAnchor="middle" fontSize="12" fill="#64748b">
+            Weak bonds maintain shape
+          </text>
+        </g>
+        
+        {/* Dividing line */}
+        <line x1="400" y1="50" x2="400" y2="350" stroke="#cbd5e1" strokeWidth="3"/>
+        
+        {/* Right side - Abnormal pH */}
+        <g>
+          {/* Label */}
+          <rect x="470" y="60" width="280" height="40" fill="#ef4444" opacity="0.2" rx="8"/>
+          <text x="610" y="85" textAnchor="middle" fontSize="18" fontWeight="bold" fill="#dc2626">
+            Abnormal pH (7.2)
+          </text>
+          
+          {/* Denatured protein - unfolded/misshapen */}
+          <g transform="translate(610, 180)">
+            {/* Unfolded protein - irregular shape */}
+            <path d="M -70,-20 Q -50,-40 -30,-35 Q -10,-30 10,-40 Q 30,-50 50,-35 Q 65,-25 70,-5 Q 72,15 65,30 Q 55,45 35,50 Q 15,52 -5,48 Q -25,44 -45,35 Q -60,25 -70,5 Z" 
+                  fill="#94a3b8" opacity="0.7" stroke="#64748b" strokeWidth="3"/>
+            
+            {/* Distorted active site - no longer functional */}
+            <ellipse cx="15" cy="-25" rx="20" ry="8" fill="#64748b" opacity="0.5" stroke="#475569" strokeWidth="2"/>
+            <text x="15" y="-20" textAnchor="middle" fontSize="9" fill="#1e293b" fontWeight="bold">
+              Distorted
+            </text>
+            
+            {/* Broken bonds shown as disconnected lines */}
+            <line x1="-40" y1="-20" x2="-35" y2="5" stroke="#ef4444" strokeWidth="2.5" opacity="0.8"/>
+            <circle cx="-40" cy="-20" r="3" fill="#ef4444"/>
+            <circle cx="-35" cy="5" r="3" fill="#ef4444"/>
+            
+            <line x1="10" y1="-30" x2="15" y2="10" stroke="#ef4444" strokeWidth="2.5" opacity="0.8"/>
+            <circle cx="10" cy="-30" r="3" fill="#ef4444"/>
+            <circle cx="15" cy="10" r="3" fill="#ef4444"/>
+          </g>
+          
+          {/* Substrate molecule - same as left */}
+          <g transform="translate(610, 100)">
+            <circle cx="0" cy="0" r="15" fill="#fbbf24" stroke="#f59e0b" strokeWidth="2"/>
+            <text x="0" y="5" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#78350f">
+              S
+            </text>
+          </g>
+          
+          {/* X showing substrate doesn't fit */}
+          <line x1="600" y1="130" x2="620" y2="150" stroke="#dc2626" strokeWidth="4"/>
+          <line x1="620" y1="130" x2="600" y2="150" stroke="#dc2626" strokeWidth="4"/>
+          
+          {/* Label */}
+          <text x="610" y="300" textAnchor="middle" fontSize="14" fill="#dc2626" fontWeight="600">
+            ✗ Substrate cannot bind
+          </text>
+          <text x="610" y="320" textAnchor="middle" fontSize="12" fill="#64748b">
+            Weak bonds broken
+          </text>
+        </g>
+        
+        {/* Bottom explanation */}
+        <text x="400" y="370" textAnchor="middle" fontSize="13" fill="#475569" fontStyle="italic">
+          Even a small pH change disrupts the hydrogen bonds and ionic interactions that maintain protein structure
+        </text>
+      </svg>
+    </div>
+  );
+};
+
 const PhModule = () => {
   const [learnerName, setLearnerName] = useState('');
   const [nameSubmitted, setNameSubmitted] = useState(false);
@@ -105,7 +231,7 @@ const PhModule = () => {
 progressiveScreens: [
   "Your blood pH is normally maintained between <strong>7.35 and 7.45</strong>—a remarkably narrow range considering the constant metabolic activity occurring in your body.__SHOW_DIAGRAM__",
 "<strong>Why is this tight control so critical?</strong><br><br>Even a small shift of just 0.2 pH units - from 7.4 to 7.2 - for example, represents a <strong>60% increase in hydrogen ion concentration</strong>. This may not sound dramatic, but your cells and the proteins within them are exquisitely sensitive to such changes.<br><br>To understand why, we need to consider what makes proteins work in the first place.",
-      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.",
+      "<h3 class='text-xl font-bold text-purple-900 mb-4'>The Protein Problem</h3>Proteins are the workhorses of your body. Enzymes catalyze reactions, hemoglobin carries oxygen, membrane channels transport ions—but all of these proteins depend on their <strong>precise three-dimensional shape</strong> to function. That shape is maintained by weak chemical bonds, including hydrogen bonds and ionic interactions, which are exquisitely sensitive to pH changes.__SHOW_PROTEIN_DIAGRAM__",
       
       "When pH shifts outside the normal range, these bonds break or form inappropriately, causing proteins to <strong>change shape (denature)</strong>. An enzyme that loses its shape loses its function. <br><br>Imagine trying to use a key that has been slightly melted—it won't fit the lock properly. Similarly, a denatured enzyme can't bind its substrate effectively.",
       
