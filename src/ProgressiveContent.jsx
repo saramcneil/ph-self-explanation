@@ -17,10 +17,7 @@ const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
     <div className="space-y-6">
       <div className="bg-purple-50 border-l-4 border-purple-600 p-6 rounded-lg min-h-[300px]">
         {screens[currentScreen] === "__DIAGRAM__" ? (
-          <div className="text-center">
-            <p className="text-2xl text-red-600 font-bold mb-4">DIAGRAM DETECTED!</p>
-            {DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>}
-          </div>
+  DiagramComponent ? <DiagramComponent /> : <div>Diagram loading...</div>
         ) : (
           <div 
             className="text-gray-800 leading-relaxed text-lg"
