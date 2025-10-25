@@ -58,20 +58,34 @@ const PhModule = () => {
   };
 
   const sendToGoogleSheets = async (data) => {
-    try {
-      await fetch(GOOGLE_SHEET_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-      console.log('Data sent to Google Sheets');
-    } catch (error) {
-      console.error('Error sending to Google Sheets:', error);
-    }
-  };
+  try {
+    // Format feedback in a more readable way
+    const formattedFeedback = {
+      strengths: data.feedback?.strengths?.map(s => s.content).join(' | ') || 'None',
+      misconceptions: data.feedback?.misconceptions?.map(m => m.correction).join(' | ') || 'None',
+      gaps: data.feedback?.gaps?.map(g => g.suggestion).join(' | ') || 'None',
+      extensionQuestions: data.feedback?.extensionQuestions?.map(q => q.question).join(' | ') || 'None'
+    };
+
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: data.name,
+        explanation: data.explanation,
+        feedback: JSON.stringify(formattedFeedback, null, 2), // Pretty-printed
+        viewedExpert: data.viewedExpert,
+        understandingLevel: data.understandingLevel
+      })
+    });
+    console.log('Data sent to Google Sheets');
+  } catch (error) {
+    console.error('Error sending to Google Sheets:', error);
+  }
+};
 
   const generateFeedbackPrompt = () => {
     return `You are an expert medical educator providing feedback on a student's self-explanation about pH homeostasis and protein function.
