@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       // Log the response for debugging
       console.log('Anthropic API Response:', JSON.stringify(data, null, 2));
       
-      // Check if the response is an error
+      // Check if the response is error
       if (!response.ok || data.error) {
         console.error('Anthropic API Error:', data);
         return res.status(response.status || 500).json({ 
