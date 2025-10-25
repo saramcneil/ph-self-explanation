@@ -63,15 +63,15 @@ const PhModule = () => {
     let feedbackText = '';
     
     if (data.feedback?.strengths && data.feedback.strengths.length > 0) {
-      feedbackText += 'STRENGTHS: ' + data.feedback.strengths.map(s => s.content).join(' | ') + '\n\n';
+      feedbackText += 'STRENGTHS: ' + data.feedback.strengths.map(s => s.content).join(' | ') + '  ';
     }
     
     if (data.feedback?.misconceptions && data.feedback.misconceptions.length > 0) {
-      feedbackText += 'MISCONCEPTIONS: ' + data.feedback.misconceptions.map(m => m.correction).join(' | ') + '\n\n';
+      feedbackText += 'MISCONCEPTIONS: ' + data.feedback.misconceptions.map(m => m.correction).join(' | ') + '  ';
     }
     
     if (data.feedback?.gaps && data.feedback.gaps.length > 0) {
-      feedbackText += 'GAPS: ' + data.feedback.gaps.map(g => g.suggestion).join(' | ') + '\n\n';
+      feedbackText += 'GAPS: ' + data.feedback.gaps.map(g => g.suggestion).join(' | ') + '  ';
     }
     
     if (data.feedback?.extensionQuestions && data.feedback.extensionQuestions.length > 0) {
