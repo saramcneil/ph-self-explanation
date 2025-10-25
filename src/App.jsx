@@ -99,7 +99,7 @@ const PhModule = () => {
 };
 
   const generateFeedbackPrompt = () => {
-    return `You are an expert medical educator providing feedback on a student's self-explanation about pH homeostasis and protein function.
+  return `You are an expert medical educator providing feedback on a student's self-explanation about pH homeostasis and protein function.
 
 LEARNING CONTENT:
 ${contentData.text}
@@ -145,10 +145,23 @@ Analyze the student's explanation and provide feedback in JSON format with NO ma
     }
   ],
   "overallAssessment": {
-    "understandingLevel": "strong",
+    "understandingLevel": 3,
     "encouragement": "Personalized encouraging message"
   }
 }
+
+UNDERSTANDING LEVEL SCALE (1-5):
+Rate the student's understanding on this scale:
+
+5 - Excellent: Addresses all critical concepts with accurate mechanisms, quantitative details, and sophisticated integration. No misconceptions. Shows advanced understanding with clinical connections.
+
+4 - Strong: Addresses most critical concepts correctly with good mechanistic reasoning. May have minor gaps in detail but no major misconceptions. Shows solid foundational understanding.
+
+3 - Developing: Grasps basic concepts but lacks detail or has 1-2 misconceptions. Missing some critical concepts. Shows reasoning ability but needs refinement and deeper understanding.
+
+2 - Needs Improvement: Multiple misconceptions or significant gaps in understanding. Addresses only 1-2 critical concepts. Fundamental misunderstandings of mechanisms that require correction.
+
+1 - Needs Major Review: Severe misconceptions or completely off-target. Missing nearly all critical concepts. Response too brief or shows fundamental lack of understanding that requires starting over.
 
 FEEDBACK GUIDELINES:
 1. Quote their specific words when praising or correcting
@@ -157,9 +170,10 @@ FEEDBACK GUIDELINES:
 4. If they're wrong about core concepts, prioritize correcting those
 5. If they show strong understanding, push them to deeper insights
 6. Be specific and reference their actual explanation
+7. Assign the understanding level (1-5) based on the scale above
 
 YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or any other formatting.`;
-  };
+};
 
   const submitName = () => {
     if (learnerName.trim().length < 2) {
