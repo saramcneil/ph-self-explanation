@@ -24,7 +24,6 @@ const ProgressiveContent = ({ screens, onComplete, DiagramComponent }) => {
     dangerouslySetInnerHTML={{ __html: screens[currentScreen] }}
   />
 )}
-        />
       </div>
 
       <div className="flex items-center justify-between">
