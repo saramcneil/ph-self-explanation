@@ -386,10 +386,11 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
         {nameSubmitted && (
           <>
             {showProgressiveContent ? (
-              <ProgressiveContent 
-                screens={contentData.progressiveScreens}
-                onComplete={() => setShowProgressiveContent(false)}
-              />
+<ProgressiveContent 
+  screens={contentData.progressiveScreens}
+  onComplete={() => setShowProgressiveContent(false)}
+  DiagramComponent={BloodPhScale}
+/>
             ) : (
               <>
                 {!feedback && (
