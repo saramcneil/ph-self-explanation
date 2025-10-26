@@ -458,13 +458,12 @@ const handleViewExpert = () => {
   }
 };
 
-  const handleEndDemo = async () => {
+const handleEndDemo = async () => {
   if (sessionData) {
     try {
       await sendToGoogleSheets(sessionData);
-      alert("Thank you! Your session data has been saved.");
-      // Optional: reset the demo or redirect
-      // window.location.reload();
+      // Redirect to a clean completion page
+      window.location.href = "/thank-you.html";
     } catch (error) {
       console.error("Error saving session data:", error);
       alert("There was an error saving your data. Please try again.");
