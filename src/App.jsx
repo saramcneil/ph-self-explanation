@@ -459,7 +459,8 @@ const handleViewExpert = () => {
 };
 
 const handleEndDemo = async () => {
-  if (sessionData) {
+  if (sessionData && !loading) {
+    setLoading(true);
     try {
       await sendToGoogleSheets(sessionData);
       // Redirect to a clean completion page
@@ -467,6 +468,7 @@ const handleEndDemo = async () => {
     } catch (error) {
       console.error("Error saving session data:", error);
       alert("There was an error saving your data. Please try again.");
+      setLoading(false);
     }
   }
 };
@@ -710,14 +712,14 @@ const handleEndDemo = async () => {
               </div>
             )}
           </div>
-
 <div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center space-y-4">
   <p className="text-gray-700 font-semibold">✅ Thank you for trying out personalized feedback!</p>
   <button
     onClick={handleEndDemo}
-    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg"
+    disabled={loading}
+    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
   >
-    End this Demo
+    {loading ? 'Saving...' : 'End this Demo'}
   </button>
   <p className="text-xs text-gray-600">Click "End this Demo" to save your session data</p>
 </div>
