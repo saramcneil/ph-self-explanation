@@ -222,6 +222,7 @@ const PhModule = () => {
   const [loading, setLoading] = useState(false);
   const [showExpert, setShowExpert] = useState(false);
   const [showProgressiveContent, setShowProgressiveContent] = useState(true);
+    const [sessionData, setSessionData] = useState(null); 
 
   // **REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT WEB APP URL**
   const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwfQ-79kvUpkA3SjJg847tS6Kay9GXb_CMfQpvKgXIY8tB4VDMYQtHKW1toHbv8J6j5/exec';
@@ -427,14 +428,14 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
       const feedbackJSON = JSON.parse(responseText);
       setFeedback(feedbackJSON);
 
-      // Send data to Google Sheets
-      await sendToGoogleSheets({
-        name: learnerName,
-        explanation: userExplanation,
-        feedback: feedbackJSON,
-        viewedExpert: false,
-        understandingLevel: feedbackJSON.overallAssessment?.understandingLevel || 'unknown'
-      });
+     // Store data in state instead of sending immediately
+setSessionData({
+  name: learnerName,
+  explanation: userExplanation,
+  feedback: parsedFeedback,
+  viewedExpert: false,
+  understandingLevel: parsedFeedback.overallAssessment?.understandingLevel || 'unknown'
+});
 
     } catch (error) {
       console.error("Error getting feedback:", error);
@@ -444,22 +445,33 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
     setLoading(false);
   };
 
-  const handleViewExpert = async () => {
-    const newShowExpert = !showExpert;
-    setShowExpert(newShowExpert);
-    
-    // Log when they view expert explanation
-    if (newShowExpert && feedback) {
-      await sendToGoogleSheets({
-        name: learnerName,
-        explanation: userExplanation,
-        feedback: feedback,
-        viewedExpert: true,
-        understandingLevel: feedback.overallAssessment?.understandingLevel || 'unknown'
-      });
-    }
-  };
+const handleViewExpert = () => {
+  const newShowExpert = !showExpert;
+  setShowExpert(newShowExpert);
+  
+  // Update session data when they view expert explanation
+  if (newShowExpert && sessionData) {
+    setSessionData({
+      ...sessionData,
+      viewedExpert: true
+    });
+  }
+};
 
+  const handleEndDemo = async () => {
+  if (sessionData) {
+    try {
+      await sendToGoogleSheets(sessionData);
+      alert("Thank you! Your session data has been saved.");
+      // Optional: reset the demo or redirect
+      // window.location.reload();
+    } catch (error) {
+      console.error("Error saving session data:", error);
+      alert("There was an error saving your data. Please try again.");
+    }
+  }
+};
+  
   const FeedbackTypeIcon = ({ type }) => {
     const icons = {
       mechanistic_reasoning: Sparkles,
@@ -700,10 +712,16 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
             )}
           </div>
 
-          <div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center">
-            <p className="text-gray-700 font-semibold">✅ Thank you for trying out personalized feedback!</p>
-            <p className="text-sm text-gray-600 mt-2">Your responses have been recorded and will help improve medical eductaion.</p>
-          </div>
+<div className="bg-blue-50 border-2 border-blue-300 p-6 rounded-lg text-center space-y-4">
+  <p className="text-gray-700 font-semibold">✅ Thank you for trying out personalized feedback!</p>
+  <button
+    onClick={handleEndDemo}
+    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg"
+  >
+    End this Demo
+  </button>
+  <p className="text-xs text-gray-600">Click "End this Demo" to save your session data</p>
+</div>
         </div>
       )}
     </div>
