@@ -432,9 +432,9 @@ YOUR RESPONSE MUST BE ONLY VALID JSON. DO NOT include markdown code blocks or an
 setSessionData({
   name: learnerName,
   explanation: userExplanation,
-  feedback: parsedFeedback,
+  feedback: feedbackJSON,  
   viewedExpert: false,
-  understandingLevel: parsedFeedback.overallAssessment?.understandingLevel || 'unknown'
+  understandingLevel: feedbackJSON.overallAssessment?.understandingLevel || 'unknown'  //
 });
 
     } catch (error) {
